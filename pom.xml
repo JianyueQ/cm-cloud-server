@@ -35,7 +35,7 @@
         <module>cm-message</module>
         
         <!-- 保留原单体服务(逐步迁移) -->
-        <module>cm-server</module>
+<!--        <module>cm-server</module>-->
     </modules>
 
     <properties>
