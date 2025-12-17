@@ -1,0 +1,92 @@
+server:
+  port: 8888
+  tomcat:
+    max-http-form-post-size: 1GB
+
+spring:
+  profiles:
+    active: dev
+  main:
+    allow-circular-references: true
+  datasource:
+      driver-class-name: ${cm.datasource.driver-class-name}
+      url: jdbc:mysql://${cm.datasource.host}:${cm.datasource.port}/${cm.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: ${cm.datasource.username}
+      password: ${cm.datasource.password}
+  data:
+    redis:
+      host: ${cm.redis.host}
+      port: ${cm.redis.port}
+      database: ${cm.redis.database}
+      password: ${cm.redis.password}
+
+
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 1GB
+      max-request-size: 1GB
+  ai:
+    deepseek:
+      api-key: sk-99b7a646f20b4915b8cc0efe1ab694bf
+      chat:
+        options:
+          model: deepseek-chat
+  rabbitmq:
+    host: ${cm.rabbitmq.host}
+    port: ${cm.rabbitmq.port}
+    username: ${cm.rabbitmq.username}
+    password: ${cm.rabbitmq.password}
+    virtual-host: /cm
+    # 连接池配置
+    connection-timeout: 15000
+    # 开启发布确认
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    template:
+      mandatory: true
+
+
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.cm.entity
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+logging:
+  level:
+    com:
+      ccr:
+        mapper: debug
+        service: info
+        controller: info
+
+cm:
+  jwt:
+    # 设置jwt签名加密时使用的秘钥
+    admin-secret-key: qwertyuiopasdfghjklzxcvbnm
+    # 设置jwt过期时间
+    admin-ttl: 7200000
+    # 设置前端传递过来的令牌名称
+    admin-token-name: Authorization
+
+    user-secret-key: qwertyuiopasdfghjklzxcvbnm
+    user-token-name: Authorization
+    user-ttl: 7200000
+
+    teacher-secret-key: qwertyuiopasdfghjklzxcvbnm
+    teacher-ttl: 7200000
+    teacher-token-name: Authorization
+
+  alioss:
+    endpoint: ${cm.alioss.endpoint}
+    access-key-id: ${cm.alioss.access-key-id}
+    access-key-secret: ${cm.alioss.access-key-secret}
+    bucket-name: ${cm.alioss.bucket-name}
+
+

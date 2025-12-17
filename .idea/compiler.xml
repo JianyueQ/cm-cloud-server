@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="cm-common" />
+        <module name="cm-course" />
+        <module name="cm-message" />
+        <module name="cm-pojo" />
+        <module name="cm-api" />
+        <module name="cm-grade" />
+        <module name="cm-user" />
+        <module name="cm-attendance" />
+        <module name="cm-server" />
+        <module name="cm-gateway" />
+        <module name="cm-resource" />
+        <module name="cm-system" />
+        <module name="cm-auth" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ccr-common" target="17" />
+      <module name="ccr-pojo" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ccr-common" options="-parameters" />
+      <module name="ccr-pojo" options="-parameters" />
+      <module name="cm-api" options="-parameters" />
+      <module name="cm-attendance" options="-parameters" />
+      <module name="cm-auth" options="-parameters" />
+      <module name="cm-common" options="-parameters" />
+      <module name="cm-course" options="-parameters" />
+      <module name="cm-gateway" options="-parameters" />
+      <module name="cm-grade" options="-parameters" />
+      <module name="cm-message" options="-parameters" />
+      <module name="cm-pojo" options="-parameters" />
+      <module name="cm-resource" options="-parameters" />
+      <module name="cm-server" options="-parameters" />
+      <module name="cm-system" options="-parameters" />
+      <module name="cm-user" options="-parameters" />
+    </option>
+  </component>
+</project>

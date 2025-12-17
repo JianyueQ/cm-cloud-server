@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cm.mapper.StudentUserInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.cm.vo.StudentUserInfoVO">
+        <id column="id" property="id"/>
+        <result column="real_name" property="realName"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="email" property="email"/>
+        <result column="avatar" property="avatar"/>
+        <result column="gender" property="gender"/>
+        <result column="status" property="status"/>
+        <result column="user_type" property="userType"/>
+        <association property="studentVO" javaType="com.cm.vo.StudentVO" column="id" select="getStudentInfoByUserId"/>
+    </resultMap>
+
+    <update id="updateUserInfo">
+        update user
+        <set>
+            <if test="password != null and password != ''"> password = #{password}, </if>
+            <if test="realName != null and realName != ''"> real_name = #{realName}, </if>
+            <if test="phone != null and phone != ''"> phone = #{phone}, </if>
+            <if test="email != null and email != ''"> email = #{email}, </if>
+            <if test="avatar != null and avatar != ''"> avatar = #{avatar}, </if>
+            <if test="gender != null"> gender = #{gender}, </if>
+        </set>
+        where
+        id = #{id} and is_deleted = 0
+    </update>
+
+    <select id="getUserInfoById" resultMap="BaseResultMap">
+        select id,real_name,phone,email,avatar,gender,status,user_type from user where id = #{currentId} and is_deleted = 0
+    </select>
+
+    <select id="getStudentInfoByUserId" resultType="com.cm.vo.StudentVO">
+        select
+            student.id,
+            student.student_no,enrollment_year,
+            class.grade,education_level,
+            class.status,
+            college.name as collegeName,
+            major.name as majorName,
+            class.name as className
+        from student
+            left join college on student.college_id = college.id
+            left join major on student.major_id = major.id
+            left join class on student.class_id = class.id
+        where user_id = #{id}
+          and student.is_deleted = 0
+    </select>
+
+    <select id="selectById" resultType="com.cm.entity.User">
+        select id,username,password from user where id = #{currentId} and is_deleted = 0
+    </select>
+
+</mapper>

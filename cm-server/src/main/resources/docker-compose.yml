@@ -1,0 +1,84 @@
+services:
+  cm-server:
+    build: .
+    image: cm-server
+    container_name: cm-server
+    ports:
+      - "8888:8888"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/campus_microservices?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=123456
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SPRING_REDIS_PASSWORD=123456
+      - ALIBABA_CLOUD_ACCESS_KEY_ID=
+      - ALIBABA_CLOUD_ACCESS_KEY_SECRET=
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone/timezone:/etc/timezone
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - cm-network
+
+
+  mysql:
+    image: mysql:8.0
+    container_name: cm-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: campus_microservices
+    volumes:
+      - /root/cm/mysql/data:/var/lib/mysql
+      - /root/cm/mysql/conf:/etc/mysql/conf.d
+      - /root/cm/mysql/init:/docker-entrypoint-initdb.d
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone/timezone:/etc/timezone
+    networks:
+      - cm-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p123456" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: cm-redis
+    volumes:
+      - /root/cm/redis/data:/data
+      - /root/cm/redis/conf:/usr/local/etc/redis
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone/timezone:/etc/timezone:ro
+    networks:
+      - cm-network
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+
+  nginx:
+    image: nginx:1.20.1
+    container_name: cm-nginx
+    volumes:
+      - /root/cm/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - /root/cm/nginx/html/admin:/usr/share/nginx/html/admin
+      - /root/cm/nginx/html/user:/usr/share/nginx/html/user
+      - /root/cm/nginx/html/teacher:/usr/share/nginx/html/teacher
+      - /root/cm/nginx/ssl:/etc/nginx/ssl
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone/timezone:/etc/timezone:ro
+    ports:
+      - "18181:18181"
+      - "18182:18182"
+      - "18183:18183"
+    command: ["nginx", "-g", "daemon off;"]
+    depends_on:
+      - cm-server
+    networks:
+      - cm-network
+
+networks:
+  cm-network:
+    driver: bridge

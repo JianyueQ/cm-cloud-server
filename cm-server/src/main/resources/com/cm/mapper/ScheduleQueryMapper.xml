@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cm.mapper.ScheduleQueryMapper">
+    <select id="listPage" resultType="com.cm.vo.ScheduleQueryPageVO">
+        select course.id,
+               course.name            as courseName,
+               course.course_type     as courseType,
+               course.assessment_type as assessmentType,
+               course_selection.teacher_name,
+               course_selection.semester,
+               course_selection.selection_time,
+               course_selection.status
+        from course
+                 left join course_selection on course.id = course_selection.course_id
+        <where>
+            <if test="courseName != null and courseName != ''">and course.name like concat('%', #{courseName}, '%')</if>
+            <if test="teacherName != null and teacherName != ''">and course_selection.teacher_name like concat('%', #{teacherName}, '%')</if>
+            <if test="semester != null and semester != ''">and course_selection.semester like concat('%', #{semester}, '%')</if>
+            and course_selection.student_id = (select id from student where user_id = #{userId})
+            and course.is_deleted = 0
+            and course_selection.is_deleted = 0
+            and course.status = 1
+            and course_selection.status != 2
+        </where>
+        order by course_selection.selection_time desc
+    </select>
+
+    <select id="detail" resultType="com.cm.vo.ScheduleQueryVO">
+        select course.id                       as id,
+               course.course_code              as courseCode,
+               course.name                     as courseName,
+               course.description              as description,
+               course.theory_hours             as theoryHours,
+               course.practice_hours           as practiceHours,
+               course.total_hours              as totalHours,
+               course.course_type              as courseType,
+               course.assessment_type          as assessmentType,
+               course_selection.semester       as semester,
+               course_selection.selection_time as selectionTime,
+               course_selection.status         as status,
+               course_selection.teacher_name   as teacherName,
+               course_teaching.schedule_info   as scheduleInfo
+        from course
+                 left join course_selection on course.id = course_selection.course_id
+                 left join course_teaching on course.id = course_teaching.course_id
+        where course.id = #{id}
+          and student_id = (select id from student where user_id = #{currentId})
+          and course_selection.is_deleted = 0
+          and course.is_deleted = 0
+          and course_teaching.is_deleted = 0
+          and course_selection.status = 1
+    </select>
+</mapper>

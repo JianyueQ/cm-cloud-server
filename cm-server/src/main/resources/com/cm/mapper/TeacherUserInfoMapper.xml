@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cm.mapper.TeacherUserInfoMapper">
+
+    <update id="updateUserInfo">
+        update user
+        <set>
+            <if test="realName != null and realName != ''"> real_name = #{realName}, </if>
+            <if test="phone != null and phone != ''"> phone = #{phone}, </if>
+            <if test="email != null and email != ''"> email = #{email}, </if>
+            <if test="avatar != null and avatar != ''"> avatar = #{avatar}, </if>
+            <if test="gender != null"> gender = #{gender}, </if>
+            <if test="password != null and password != ''"> password = #{password}, </if>
+        </set>
+        where id = #{id} and user_type = 2 and is_deleted = 0
+    </update>
+
+    <select id="selectById" resultType="com.cm.entity.User">
+        select id,username,password from user
+        where id = #{currentId} and user_type = 2 and is_deleted = 0
+    </select>
+
+    <select id="getUserInfoById" resultType="com.cm.vo.TeacherUserInfoVO">
+        select user.real_name, user.phone, user.email, user.avatar, user.gender,user.user_type,
+               teacher.teacher_no,teacher.title, teacher.hire_date, teacher.status,teacher.id as teacherId,
+               college.id as collegeId, major.id as majorId,
+               college.name as collegeName, major.name as majorName
+            from user
+                left join teacher on user.id = teacher.user_id
+                left join college on teacher.college_id = college.id
+                left join major on teacher.major_id = major.id
+        where user.id = #{currentId} and user.user_type = 2 and user.is_deleted = 0
+    </select>
+</mapper>

@@ -1,0 +1,87 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: cm-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml
+    gateway:
+      discovery:
+        locator:
+          enabled: true  # 启用服务发现
+          lower-case-service-id: true
+      routes:
+        # 认证服务路由
+        - id: cm-auth
+          uri: lb://cm-auth
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+
+        # 系统管理服务路由
+        - id: cm-system
+          uri: lb://cm-system
+          predicates:
+            - Path=/system/**
+          filters:
+            - StripPrefix=1
+
+        # 用户服务路由
+        - id: cm-user
+          uri: lb://cm-user
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=1
+
+        # 课程服务路由
+        - id: cm-course
+          uri: lb://cm-course
+          predicates:
+            - Path=/course/**
+          filters:
+            - StripPrefix=1
+
+        # 考勤服务路由
+        - id: cm-attendance
+          uri: lb://cm-attendance
+          predicates:
+            - Path=/attendance/**
+          filters:
+            - StripPrefix=1
+
+        # 成绩服务路由
+        - id: cm-grade
+          uri: lb://cm-grade
+          predicates:
+            - Path=/grade/**
+          filters:
+            - StripPrefix=1
+
+        # 资源服务路由
+        - id: cm-resource
+          uri: lb://cm-resource
+          predicates:
+            - Path=/resource/**
+          filters:
+            - StripPrefix=1
+
+        # 消息服务路由
+        - id: cm-message
+          uri: lb://cm-message
+          predicates:
+            - Path=/message/**
+          filters:
+            - StripPrefix=1
+
+  redis:
+    host: localhost
+    port: 6379
+    database: 0

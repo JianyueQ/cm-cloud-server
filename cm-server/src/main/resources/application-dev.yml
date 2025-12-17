@@ -1,0 +1,23 @@
+cm:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    host: localhost
+    port: 3306
+    database: campus_microservices
+    username: root
+    password: 123456
+  alioss:
+    endpoint: oss-cn-shenzhen.aliyuncs.com
+    access-key-id: ${ALIBABA_CLOUD_ACCESS_KEY_ID}
+    access-key-secret: ${ALIBABA_CLOUD_ACCESS_KEY_SECRET}
+    bucket-name: sky-take-out-0011
+  redis:
+    database: 4
+    host: localhost
+    port: 6379
+    password: 123456
+  rabbitmq:
+    host: 192.168.127.139
+    port: 5672
+    username: cmuser
+    password: cmuser
