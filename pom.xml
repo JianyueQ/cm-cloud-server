@@ -23,17 +23,10 @@
         
         <!-- 基础设施服务 -->
         <module>cm-gateway</module>
-        <module>cm-auth</module>
-        
+
         <!-- 业务微服务 -->
-        <module>cm-system</module>
-        <module>cm-user</module>
-        <module>cm-course</module>
-        <module>cm-attendance</module>
-        <module>cm-grade</module>
-        <module>cm-resource</module>
-        <module>cm-message</module>
-        
+        <module>services</module>
+
         <!-- 保留原单体服务(逐步迁移) -->
 <!--        <module>cm-server</module>-->
     </modules>
@@ -62,6 +55,7 @@
         <hutool.captcha>5.8.28</hutool.captcha>
         <oshi>6.8.0</oshi>
         <spring.ai>0.99.0</spring.ai>
+        <seata>2.0.0</seata>
     </properties>
 
     <dependencyManagement>
@@ -185,6 +179,12 @@
                 <version>${oshi}</version>
             </dependency>
 
+            <!--seata-->
+            <dependency>
+                <groupId>io.seata</groupId>
+                <artifactId>seata-spring-boot-starter</artifactId>
+                <version>${seata}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>

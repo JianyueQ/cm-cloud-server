@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cm.resource.mapper.ResourceManagementMapper">
+    <insert id="addResource">
+        insert into teaching_resource
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="description != null and description != ''">description,</if>
+            <if test="resourceType != null">resource_type,</if>
+            <if test="fileUrls != null and fileUrls != ''">file_urls,</if>
+            <if test="fileNames != null and fileNames != ''">file_names,</if>
+            <if test="fileSizes != null and fileSizes != ''">file_sizes,</if>
+            <if test="courseId != null">course_id,</if>
+            <if test="courseName != null and courseName != ''">course_name,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="uploaderId != null">uploader_id,</if>
+            <if test="uploaderName != null and uploaderName != ''">uploader_name,</if>
+            <if test="downloadCount != null">download_count,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="updateUser != null">update_user,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="description != null and description != ''">#{description},</if>
+            <if test="resourceType != null">#{resourceType},</if>
+            <if test="fileUrls != null and fileUrls != ''">#{fileUrls},</if>
+            <if test="fileNames != null and fileNames != ''">#{fileNames},</if>
+            <if test="fileSizes != null and fileSizes != ''">#{fileSizes},</if>
+            <if test="courseId != null">#{courseId},</if>
+            <if test="courseName != null and courseName != ''">#{courseName},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="uploaderId != null">#{uploaderId},</if>
+            <if test="uploaderName != null and uploaderName != ''">#{uploaderName},</if>
+            <if test="downloadCount != null">#{downloadCount},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+        </trim>
+    </insert>
+
+    <update id="updateResource">
+        update teaching_resource
+        set title = #{title}
+        where id = #{id} and course_id = #{courseId} and is_deleted = 0
+    </update>
+
+    <update id="deleteResource">
+        update teaching_resource
+        set is_deleted = 1
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <select id="getUserInfoById" resultType="com.cm.entity.User">
+        select id,real_name from user where id = #{currentId} and is_deleted = 0
+    </select>
+
+    <select id="getResourceList" resultType="com.cm.vo.ResourceVO">
+        select id, title, description, resource_type, parent_id, file_urls, file_names, file_sizes,course_id,uploader_name, download_count from teaching_resource
+        <where>
+            <if test="id != null">id = #{id}</if>
+            <if test="title != null">and title like concat('%',#{title},'%')</if>
+            <if test="courseId != null">and course_id = #{courseId}</if>
+            <if test="parentId != null">and parent_id = #{parentId}</if>
+            <if test="parentId == null">and parent_id is null</if>
+            and is_deleted = 0
+        </where>
+        order by create_time desc
+    </select>
+</mapper>

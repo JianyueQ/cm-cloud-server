@@ -1,0 +1,4 @@
+com.cm.common.aop.aspect.AutoFileAspect
+com.cm.common.aop.aspect.LogAspect
+com.cm.common.aop.aspect.RedisCacheAspect
+

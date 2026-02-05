@@ -3,11 +3,14 @@
     <words>
       <w>amap</w>
       <w>gmatch</w>
+      <w>grouplist</w>
       <w>hget</w>
       <w>hset</w>
       <w>operlog</w>
       <w>qwertyuiopasdfghjklzxcvbnm</w>
+      <w>seata</w>
       <w>tonumber</w>
+      <w>vgroup</w>
       <w>zhangsan</w>
     </words>
   </dictionary>

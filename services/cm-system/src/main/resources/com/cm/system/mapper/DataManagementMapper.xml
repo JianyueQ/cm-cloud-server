@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cm.system.mapper.DataManagementMapper">
+
+    <select id="getAttendanceRecordsByCourseId" resultType="com.cm.entity.AttendanceRecord">
+        select id, status
+        from attendance_record
+        where course_id = #{courseId}
+        <if test="currentId != null">
+            and teacher_id = (select id from teacher where user_id = #{currentId})
+        </if>
+        and is_deleted = 0
+    </select>
+
+    <select id="getLateRecordsByCourseId" resultType="com.cm.entity.AttendanceRecord">
+        select student_id as studentId, student_name as studentName
+        from attendance_record
+        where course_id = #{courseId}
+          and teacher_id = (select id from teacher where user_id = #{currentId})
+          and status = 2
+          and is_deleted = 0
+    </select>
+
+    <select id="getAbsentRecordsByCourseId" resultType="com.cm.entity.AttendanceRecord">
+        select student_id as studentId, student_name as studentName
+        from attendance_record
+        where course_id = #{courseId}
+          and teacher_id = (select id from teacher where user_id = #{currentId})
+          and status = 3
+          and is_deleted = 0
+    </select>
+    <select id="getLeaveRecordsByCourseId" resultType="com.cm.entity.AttendanceRecord">
+        select student_id as studentId, student_name as studentName
+        from attendance_record
+        where course_id = #{courseId}
+          and teacher_id = (select id from teacher where user_id = #{currentId})
+          and status = 4
+          and is_deleted = 0
+    </select>
+    <select id="getRecordsByCourseIdAndStatus" resultType="com.cm.entity.AttendanceRecord">
+        select student_id as studentId, student_name as studentName
+        from attendance_record
+        where course_id = #{courseId}
+          and status = #{status}
+          and is_deleted = 0
+    </select>
+
+    <select id="getGradeRecordsByCourseId" resultType="com.cm.entity.Grade">
+        select student_id as studentId, score
+        from grade
+        where course_id = #{courseId}
+        <if test="currentId != null">and teacher_id = (select id from teacher where user_id = #{currentId})</if>
+          and is_deleted = 0
+    </select>
+
+    <select id="getGradeInfoByCourseId" resultType="com.cm.vo.StatisticsScoreStudentsVO">
+        select g.student_id as studentId,
+               g.student_name as studentName,
+               g.student_no as studentNo,
+               g.score as score
+        from grade g
+        where g.course_id = #{courseId}
+          <if test="currentId != null">and g.teacher_id = (select id from teacher where user_id = #{currentId})</if>
+          and g.is_deleted = 0
+        order by g.score desc
+    </select>
+
+</mapper>

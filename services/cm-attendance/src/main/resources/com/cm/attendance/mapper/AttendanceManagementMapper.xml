@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cm.attendance.mapper.AttendanceManagementMapper">
+
+    <insert id="insertAttendanceInitiate" useGeneratedKeys="true" keyProperty="id">
+        insert into attendance_initiate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseTeachingId != null">course_teaching_id,</if>
+            <if test="courseId != null">course_id,</if>
+            <if test="courseName != null">course_name,</if>
+            <if test="teacherId != null">teacher_id,</if>
+            <if test="teacherName != null">teacher_name,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="attendanceType != null">attendance_type,</if>
+            <if test="longitude != null">longitude,</if>
+            <if test="latitude != null">latitude,</if>
+            <if test="signInPassword != null">sign_in_password,</if>
+            <if test="signInType != null">sign_in_type,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="updateUser != null">update_user,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseTeachingId != null">#{courseTeachingId},</if>
+            <if test="courseId != null">#{courseId},</if>
+            <if test="courseName != null">#{courseName},</if>
+            <if test="teacherId != null">#{teacherId},</if>
+            <if test="teacherName != null">#{teacherName},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="attendanceType != null">#{attendanceType},</if>
+            <if test="longitude != null">#{longitude},</if>
+            <if test="latitude != null">#{latitude},</if>
+            <if test="signInPassword != null">#{signInPassword},</if>
+            <if test="signInType != null">#{signInType},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsertAttendanceRecords">
+        INSERT INTO attendance_record (
+        attendance_initiate_id,
+        student_id,
+        student_no,
+        student_name,
+        avatar,
+        course_teaching_id,
+        course_id,
+        course_name,
+        teacher_id,
+        status,
+        create_time,
+        update_time,
+        create_user,
+        update_user
+        ) VALUES
+        <foreach collection="list" item="record" separator=",">
+            (
+            #{record.attendanceInitiateId},
+            #{record.studentId},
+            #{record.studentNo},
+            #{record.studentName},
+            #{record.avatar},
+            #{record.courseTeachingId},
+            #{record.courseId},
+            #{record.courseName},
+            #{record.teacherId},
+            #{record.status},
+            #{record.createTime},
+            #{record.updateTime},
+            #{record.createUser},
+            #{record.updateUser}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateAttendanceInitiate">
+        update attendance_initiate
+        set status = #{status}
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <update id="updateAttendanceRecordWithStatus">
+        update attendance_record
+        <set>
+            <if test="status != null">status = #{status},</if>
+            <if test="signInTime != null">sign_in_time = #{signInTime},</if>
+            <if test="signOutTime != null">sign_out_time = #{signOutTime},</if>
+            <if test="longitude != null">longitude = #{longitude},</if>
+            <if test="latitude != null">latitude = #{latitude},</if>
+            <if test="signInPassword != null">sign_in_password = #{signInPassword},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+        </set>
+        where attendance_initiate_id = #{attendanceInitiateId} and student_id = (select id from student where user_id = #{userId}) and course_id = #{courseId} and is_deleted = 0
+    </update>
+
+    <update id="teacherUpdateAttendanceRecordWithStatus">
+        update attendance_record
+        <set>
+            <if test="status != null">status = #{status},</if>
+            <if test="signInTime != null">sign_in_time = #{signInTime},</if>
+            <if test="signOutTime != null">sign_out_time = #{signOutTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+        </set>
+        where attendance_initiate_id = #{attendanceInitiateId} and student_id = #{studentId} and teacher_id = (select id from teacher where user_id = #{userId}) and course_id = #{courseId} and is_deleted = 0
+    </update>
+
+
+    <select id="getCourseById" resultType="courseTeaching">
+        select
+            course.id as courseId,
+            course.name as courseName,
+            course_teaching.id,
+            course_teaching.teacher_id
+        from course_teaching
+                 left join course on course.id = course_teaching.course_id
+        where course_id = #{courseId} and course_teaching.is_deleted = 0 and course_teaching.status = 1
+    </select>
+
+    <select id="getUserById" resultType="user">
+        select real_name from user where id = #{currentId}
+    </select>
+
+    <select id="listInitiate" resultType="com.cm.vo.AttendanceListPageVO">
+        select id,course_name, teacher_name, attendance_type,sign_in_type,status from attendance_initiate
+        <where>
+            <if test="courseId != null">and course_id = #{courseId}</if>
+            <if test="status != null">and status = #{status}</if>
+            and is_deleted = 0
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="listStudentIdsByCourseId" resultType="courseSelection">
+        select student_id,course_name from course_selection where course_id = #{courseId} and is_deleted = 0 and status = 1
+    </select>
+
+    <select id="getAttendanceInitiateById" resultType="attendanceInitiate">
+        select id,course_id,teacher_name,teacher_id,status from attendance_initiate where id = #{id} and is_deleted = 0
+    </select>
+
+    <resultMap id="userWithStudentMap" type="com.cm.entity.User">
+        <result property="realName" column="real_name"/>
+        <result property="avatar" column="avatar"/>
+        <association property="student" javaType="com.cm.entity.Student">
+            <id property="id" column="id"/>
+            <result property="studentNo" column="student_no"/>
+        </association>
+    </resultMap>
+    <select id="listStudentInfoByStudentIds" resultMap="userWithStudentMap">
+        select user.real_name,user.avatar,student.student_no,student.id from student left join user on student.user_id = user.id
+        where student.id in
+        <foreach item="item" collection="studentIds" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        and student.is_deleted = 0
+    </select>
+
+    <select id="getStudentList" resultType="com.cm.vo.AttendanceStudentListVO">
+        select id,student_name,avatar,status,student_id from attendance_record
+        <where>
+            <if test="attendanceInitiateId != null">and attendance_initiate_id = #{attendanceInitiateId}</if>
+            <if test="courseId != null">and course_id = #{courseId}</if>
+            <if test="status != null">
+                and status in
+                <foreach collection="status" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            and is_deleted = 0
+        </where>
+    </select>
+
+    <select id="studentListInitiate" resultType="com.cm.vo.AttendanceListPageVO">
+        select
+            attendance_initiate.id,
+            attendance_initiate.course_name,
+            attendance_initiate.teacher_name,
+            attendance_initiate.attendance_type,
+            attendance_initiate.sign_in_type,
+            attendance_initiate.status,
+            attendance_record.status as signInStatus
+        from attendance_initiate left join attendance_record on attendance_initiate.id = attendance_record.attendance_initiate_id
+        <where>
+            <if test="courseId != null">and attendance_initiate.course_id = #{courseId}</if>
+            <if test="status != null">and attendance_initiate.status = #{status}</if>
+            and attendance_record.student_id = (select id from student where user_id = #{userId})
+            and attendance_initiate.is_deleted = 0
+            and attendance_record.is_deleted = 0
+        </where>
+        order by attendance_initiate.create_time desc
+    </select>
+    <select id="getAttendanceRecord" resultType="com.cm.entity.AttendanceRecord">
+        select status from attendance_record
+        where attendance_initiate_id = #{attendanceSignInDTO.attendanceInitiateId} and student_id = (select id from student where user_id = #{currentId}) and course_id = #{attendanceSignInDTO.courseId}
+    </select>
+
+</mapper>

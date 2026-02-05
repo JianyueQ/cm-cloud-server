@@ -11,8 +11,13 @@
     </parent>
 
     <artifactId>cm-api</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <description>微服务间调用的Feign接口定义模块</description>
+
+
+    <modules>
+        <module>cm-api-system</module>
+    </modules>
 
     <dependencies>
         <!-- cm-pojo 数据传输对象 -->
@@ -33,6 +38,18 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
+
+        <!--sentinel-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

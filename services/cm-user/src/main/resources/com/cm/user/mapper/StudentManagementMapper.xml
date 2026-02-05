@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cm.user.mapper.StudentManagementMapper">
+
+    <resultMap id="CollegeMajorClassResultMap" type="com.cm.vo.CollegeMajorClassVO">
+        <id column="college_id" property="id"/>
+        <result column="college_name" property="name"/>
+        <result column="college_code" property="code"/>
+    </resultMap>
+
+    <resultMap id="MajorResultMap" type="com.cm.vo.MajorVO">
+        <id column="major_id" property="id"/>
+        <result column="major_name" property="name"/>
+        <result column="major_code" property="code"/>
+    </resultMap>
+
+    <resultMap id="ClassResultMap" type="com.cm.vo.ClassVO">
+        <id column="class_id" property="id"/>
+        <result column="class_name" property="name"/>
+        <result column="class_code" property="code"/>
+        <result column="student_count" property="studentCount"/>
+    </resultMap>
+
+    <insert id="insertStudent" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO student(user_id, student_no, college_id, major_id, class_id, enrollment_year, grade, education_level, status, create_time, update_time, create_user, update_user)
+        VALUES (#{userId}, #{studentNo}, #{collegeId}, #{majorId}, #{classId}, #{enrollmentYear}, #{grade}, #{educationLevel}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
+    </insert>
+
+    <insert id="insertUser" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO user(username, password, real_name, phone, email, gender, status, user_type, create_time, update_time, create_user, update_user)
+        VALUES (#{username}, #{password}, #{realName}, #{phone}, #{email}, #{gender}, #{status}, #{userType}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
+    </insert>
+
+    <update id="updateUser">
+        update user
+        <set>
+            <if test="password != null">password = #{password},</if>
+            <if test="realName != null">real_name = #{realName},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+        </set>
+        where id = #{id} and is_deleted = 0 and user_type = 1
+    </update>
+
+    <update id="updateStudent">
+        update student
+        <set>
+            <if test="studentNo != null">student_no = #{studentNo},</if>
+            <if test="collegeId != null">college_id = #{collegeId},</if>
+            <if test="majorId != null">major_id = #{majorId},</if>
+            <if test="classId != null">class_id = #{classId},</if>
+            <if test="enrollmentYear != null">enrollment_year = #{enrollmentYear},</if>
+            <if test="grade != null">grade = #{grade},</if>
+            <if test="educationLevel != null">education_level = #{educationLevel}</if>
+            <if test="status != null">, status = #{status}</if>
+        </set>
+        where user_id = #{userId} and is_deleted = 0
+    </update>
+
+    <update id="deleteUser">
+        update user
+        set is_deleted = 1
+        where id in
+        <foreach item="id" collection="ids" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteStudent">
+        update student
+        set is_deleted = 1
+        where user_id in
+        <foreach item="id" collection="ids" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+    <select id="getCollegeMajorClass" resultMap="CollegeMajorClassResultMap">
+        SELECT DISTINCT
+        c.id AS college_id,
+        c.name AS college_name,
+        c.code AS college_code
+        FROM college c
+        LEFT JOIN major m ON c.id = m.college_id AND m.is_deleted = 0
+        LEFT JOIN class cl ON m.id = cl.major_id AND cl.is_deleted = 0
+        <where>
+            c.is_deleted = 0
+            <if test="collegeName != null and collegeName != ''">AND c.name LIKE CONCAT('%', #{collegeName}, '%')</if>
+            <if test="collegeCode != null and collegeCode != ''">AND c.code LIKE CONCAT('%', #{collegeCode}, '%')</if>
+            <if test="majorName != null and majorName != ''">AND m.name LIKE CONCAT('%', #{majorName}, '%')</if>
+            <if test="majorCode != null and majorCode != ''">AND m.code LIKE CONCAT('%', #{majorCode}, '%')</if>
+            <if test="className != null and className != ''">AND cl.name LIKE CONCAT('%', #{className}, '%')</if>
+            <if test="classCode != null and classCode != ''">AND cl.code LIKE CONCAT('%', #{classCode}, '%')</if>
+        </where>
+        ORDER BY c.id
+    </select>
+
+    <select id="getMajorsByCollegeId" resultMap="MajorResultMap">
+        SELECT DISTINCT
+        m.id AS major_id,
+        m.name AS major_name,
+        m.code AS major_code
+        FROM major m
+        LEFT JOIN class cl ON m.id = cl.major_id AND cl.is_deleted = 0
+        <where>
+            m.college_id = #{collegeId}
+            AND m.is_deleted = 0
+            <if test="majorName != null and majorName != ''">AND m.name LIKE CONCAT('%', #{majorName}, '%')</if>
+            <if test="majorCode != null and majorCode != ''">AND m.code LIKE CONCAT('%', #{majorCode}, '%')</if>
+            <if test="className != null and className != ''">AND cl.name LIKE CONCAT('%', #{className}, '%')</if>
+            <if test="classCode != null and classCode != ''">AND cl.code LIKE CONCAT('%', #{classCode}, '%')</if>
+        </where>
+        ORDER BY m.id
+    </select>
+
+    <select id="getClassesByMajorId" resultMap="ClassResultMap">
+        SELECT
+        cl.id AS class_id,
+        cl.name AS class_name,
+        cl.code AS class_code,
+        cl.student_count AS student_count
+        FROM class cl
+        <where>
+            cl.major_id = #{majorId}
+            AND cl.is_deleted = 0
+            <if test="className != null and className != ''">AND cl.name LIKE CONCAT('%', #{className}, '%')</if>
+            <if test="classCode != null and classCode != ''">AND cl.code LIKE CONCAT('%', #{classCode}, '%')</if>
+        </where>
+        ORDER BY cl.id
+    </select>
+
+    <select id="getGradeByClassId" resultType="com.cm.entity.Student">
+        select id, major_id, name, code, grade from class
+        where id = #{classId}
+    </select>
+
+    <select id="listStudentAccount" resultType="com.cm.vo.UserWithStudentInfoPageVO">
+        select user.id, username,real_name, phone, email,student_no,user.status, education_level  from user left join student on user.id = student.user_id
+        <where>
+            <if test="username != null and username != ''">and username like CONCAT('%', #{username}, '%')</if>
+            <if test="realName != null and realName != ''">and real_name like CONCAT('%', #{realName}, '%')</if>
+            <if test="status != null">and user.status = #{status}</if>
+            <if test="studentNo != null and studentNo != ''">and student_no like CONCAT('%', #{studentNo}, '%')</if>
+            and user.is_deleted = 0 and student.is_deleted = 0
+        </where>
+        order by user.create_time desc
+    </select>
+
+    <select id="selectByUsername" resultType="com.cm.entity.User">
+        select id,username from user where username = #{username} and is_deleted = 0 and user_type = 1
+    </select>
+
+    <select id="getCollegeIdByName" resultType="java.lang.Long">
+        select id from college where name = #{collegeName}
+    </select>
+
+    <select id="getMajorIdByNameWithCollegeId" resultType="java.lang.Long">
+        select id from major where name = #{majorName} and college_id = #{collegeId}
+    </select>
+
+    <select id="getClassIdByNameWithMajorId" resultType="java.lang.Long">
+        select id from class where name = #{className} and major_id = #{majorId}
+    </select>
+
+    <select id="getStudentAccountDetail" resultType="com.cm.vo.UserWithStudentInfoVO">
+        select user.id, user.username,user.real_name, user.phone, user.email,user.gender,user.create_time, user.update_time,
+               student.student_no, student.college_id, student.major_id, student.class_id, student.enrollment_year,student.education_level, student.status,
+               college.name as collegeName,
+               major.name as majorName,
+               class.name as className
+        from user
+            left join student on user.id = student.user_id
+            left join college on  college_id = college.id
+            left join major on major_id = major.id
+            left join class on class_id = class.id
+        where user.id = #{id} and user.is_deleted = 0 and student.is_deleted = 0 and user.user_type = 1
+    </select>
+
+    <select id="selectById" resultType="com.cm.entity.User">
+        select id,username from user where id = #{id} and is_deleted = 0 and user_type = 1
+    </select>
+
+    <select id="exportStudentAccount" resultType="com.cm.user.domain.StudentExcelVO">
+        select user.id, user.username,user.real_name, user.phone, user.email,user.gender,
+        student.student_no,student.enrollment_year,student.education_level, student.status,
+        college.name as collegeName,
+        major.name as majorName,
+        class.name as className,class.grade
+        from user
+        left join student on user.id = student.user_id
+        left join college on college_id = college.id
+        left join major on major_id = major.id
+        left join class on class_id = class.id
+        <where>
+            <if test="username != null and username != ''">and username like CONCAT('%', #{username}, '%')</if>
+            <if test="realName != null and realName != ''">and real_name like CONCAT('%', #{realName}, '%')</if>
+            <if test="status != null">and user.status = #{status}</if>
+            <if test="studentNo != null and studentNo != ''">and student_no like CONCAT('%', #{studentNo}, '%')</if>
+            and user.is_deleted = 0 and student.is_deleted = 0
+        </where>
+    </select>
+
+
+    <select id="listStudent" resultType="com.cm.vo.StudentListVO">
+        select user.real_name, user.phone, user.email, student.student_no, user.gender
+        from course_selection
+        left join student on course_selection.student_id = student.id
+        left join user on student.user_id = user.id
+        <where>
+            <if test="realName != null and realName != ''">and user.real_name like CONCAT('%', #{realName}, '%')</if>
+            <if test="phone != null and phone != ''">and user.phone like CONCAT('%', #{phone}, '%')</if>
+            <if test="studentNo != null and studentNo != ''">and student.student_no like CONCAT('%', #{studentNo},
+                '%')
+            </if>
+            and course_id = #{courseId}
+            and course_selection.is_deleted = 0
+            and student.is_deleted = 0
+            and user.is_deleted = 0
+            and course_selection.status = 1
+            and course_selection.is_deleted = 0
+        </where>
+    </select>
+
+</mapper>

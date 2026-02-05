@@ -7,34 +7,48 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="cm-common" />
+        <module name="cm-common-alibabaOSS" />
+        <module name="cm-common-aop" />
         <module name="cm-course" />
         <module name="cm-message" />
+        <module name="cm-common-websocket" />
         <module name="cm-pojo" />
-        <module name="cm-api" />
         <module name="cm-grade" />
+        <module name="cm-api-system" />
         <module name="cm-user" />
         <module name="cm-attendance" />
-        <module name="cm-server" />
         <module name="cm-gateway" />
         <module name="cm-resource" />
+        <module name="cm-common-core" />
         <module name="cm-system" />
+        <module name="cm-common-redis" />
         <module name="cm-auth" />
+        <module name="cm-common-rabbitMQ" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="ccr-common" target="17" />
       <module name="ccr-pojo" target="17" />
+      <module name="cm-api-user" target="17" />
+      <module name="cm-server" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ccr-common" options="-parameters" />
       <module name="ccr-pojo" options="-parameters" />
-      <module name="cm-api" options="-parameters" />
+      <module name="cm-api" options="" />
+      <module name="cm-api-system" options="-parameters" />
+      <module name="cm-api-user" options="-parameters" />
       <module name="cm-attendance" options="-parameters" />
       <module name="cm-auth" options="-parameters" />
-      <module name="cm-common" options="-parameters" />
+      <module name="cm-common" options="" />
+      <module name="cm-common-alibabaOSS" options="-parameters" />
+      <module name="cm-common-aop" options="-parameters" />
+      <module name="cm-common-core" options="-parameters" />
+      <module name="cm-common-rabbitMQ" options="-parameters" />
+      <module name="cm-common-redis" options="-parameters" />
+      <module name="cm-common-websocket" options="-parameters" />
       <module name="cm-course" options="-parameters" />
       <module name="cm-gateway" options="-parameters" />
       <module name="cm-grade" options="-parameters" />
@@ -44,6 +58,7 @@
       <module name="cm-server" options="-parameters" />
       <module name="cm-system" options="-parameters" />
       <module name="cm-user" options="-parameters" />
+      <module name="services" options="" />
     </option>
   </component>
 </project>

@@ -1,22 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/cm-api/cm-api-system/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cm-api/cm-api-user/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/cm-api/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/cm-attendance/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/cm-auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cm-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cm-common/cm-common-alibabaOSS/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cm-common/cm-common-aop/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cm-common/cm-common-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cm-common/cm-common-core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cm-common/cm-common-rabbitMQ/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cm-common/cm-common-redis/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cm-common/cm-common-websocket/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/cm-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/cm-common/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/cm-course/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/cm-gateway/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/cm-grade/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/cm-message/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/cm-pojo/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/cm-pojo/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/cm-resource/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/cm-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/cm-server/src/main/resources/application.yml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/cm-system/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/cm-user/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/cm-attendance/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/cm-auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/cm-course/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/cm-grade/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/cm-message/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/cm-resource/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/cm-system/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/cm-user/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

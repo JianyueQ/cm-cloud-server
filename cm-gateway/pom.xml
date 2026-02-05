@@ -17,7 +17,13 @@
         <!-- cm-common 公共模块 -->
         <dependency>
             <groupId>com.cmserver</groupId>
-            <artifactId>cm-common</artifactId>
+            <artifactId>cm-common-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cmserver</groupId>
+            <artifactId>cm-common-redis</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
@@ -45,6 +51,12 @@
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
 
+        <!-- Caffeine Cache (LoadBalancer 生产环境推荐) -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+
         <!-- Redis (用于限流) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -56,6 +68,16 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
+
+        <!-- 测试-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+
     </dependencies>
 
     <build>

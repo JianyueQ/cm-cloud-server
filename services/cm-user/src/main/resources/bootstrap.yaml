@@ -1,0 +1,50 @@
+server:
+  port: 8083
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.cm.entity
+  configuration:
+    map-underscore-to-camel-case: true
+spring:
+  application:
+    name: cm-user
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.127.140:8848
+        namespace: dev
+      config:
+        server-addr: 192.168.127.140:8848
+        namespace: dev
+  config:
+    import:
+      - nacos:cm-user.yaml?group=user
+
+seata:
+  config:
+    type: nacos
+    nacos:
+      server-addr: 192.168.127.140:8848
+      namespace: dev
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+      data-id: seataServer.properties
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: 192.168.127.140:8848
+      group: SEATA_GROUP
+      namespace: dev
+      cluster: default
+      username: nacos
+      password: nacos
+  tx-service-group: default_tx_group
+  service:
+    vgroup-mapping:
+      default_tx_group: default
+    grouplist:
+      default: 192.168.127.140:8091
+  enable-auto-data-source-proxy: true
+
